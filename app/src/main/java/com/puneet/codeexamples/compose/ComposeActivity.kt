@@ -24,6 +24,9 @@ class ComposeActivity : AppCompatActivity() {
                         item {
                             ProductInformationCard(data = getProductInfoSectionData())
                         }
+                        item {
+                            BannerComponent(data = getBannerSectionData())
+                        }
                     }
                 }
             }
@@ -218,6 +221,20 @@ class ComposeActivity : AppCompatActivity() {
                             )
                         )
                     )
+                )
+            )
+        )
+    }
+
+    private fun getBannerSectionData(): Section<BannerContent> {
+        return Section(
+            version = 1,
+            content = BannerContent(
+                photo = ContentItem(
+                    type = "image",
+                    url = "https://iili.io/RmEhtn.png",
+                    imageHeight = 200.0,
+                    imageWidth = 200.0
                 )
             )
         )

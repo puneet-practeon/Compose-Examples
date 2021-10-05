@@ -8,11 +8,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -51,16 +56,25 @@ data class InfoPair(
     val value: ContentItem
 )
 
+data class BannerContent(
+    val photo: ContentItem
+)
+
 data class ContentItem(
     val type: String,
     val subType: String? = null,
     val url: String? = null,
     val label: String? = null,
+    val imageWidth: Double? = null,
+    val imageHeight: Double? = null,
     val modifiers: List<ContentModifier> = emptyList(),
     val interaction: Interaction? = null
 ) {
     companion object {
         const val SUBTYPE_ARROW_RIGHT = "arrow_right"
+        const val TYPE_IMAGE = "image"
+        const val TYPE_CARD_BANNER = "card_banner"
+        const val TYPE_FULL_BANNER = "full_banner"
     }
 }
 
@@ -104,6 +118,8 @@ data class ContentModifier(
         const val TYPE_STRIKETHROUGH = "strikethrough"
     }
 }
+
+// MARK - 05/10/21 Components
 
 @ExperimentalUnitApi
 @Composable
@@ -219,6 +235,35 @@ fun WebviewCard(data: Section<WebviewContent>) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun BannerComponent(data: Section<BannerContent>) {
+    data.content.photo.run {
+        if (type == ContentItem.TYPE_CARD_BANNER)
+            Card {
+                Box {
+                    val cardWidth = LocalView.current.width.toFloat()
+                    val widthModifier = imageWidth?.let { w ->
+                        if (w > cardWidth)
+                            Modifier.fillMaxWidth()
+                        else
+                            Modifier.width(w.dp)
+                    } ?: Modifier
+                    val heightModifier = imageHeight?.let { h ->
+                        Modifier.height(h.dp)
+                    } ?: Modifier
+                    url?.let { url ->
+                        GlideImage(
+                            imageModel = url,
+                            modifier = Modifier.then(widthModifier).then(heightModifier)
+                                .align(Alignment.Center),
+                            contentScale = ContentScale.Fit
+                        )
+                    }
+                }
+            }
     }
 }
 
