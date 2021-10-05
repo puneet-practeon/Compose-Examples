@@ -148,7 +148,7 @@ class ComposeActivity : AppCompatActivity() {
                     InfoPair(
                         key = ContentItem(
                             type = "text",
-                            label = "Name"
+                            label = "Name:"
                         ),
                         value = ContentItem(
                             type = "text",
@@ -170,31 +170,52 @@ class ComposeActivity : AppCompatActivity() {
                     InfoPair(
                         key = ContentItem(
                             type = "text",
-                            label = "Size"
+                            label = "Size:"
                         ),
                         value = ContentItem(
                             type = "text",
-                            label = "Medium"
+                            label = "\$VAR$",
+                            modifiers = listOf(
+                                ContentModifier(
+                                    type = "bold",
+                                    displayText = "Medium",
+                                    identifier = "\$VAR$"
+                                )
+                            )
                         )
                     ),
                     InfoPair(
                         key = ContentItem(
                             type = "text",
-                            label = "Country of Origin"
+                            label = "Country of Origin:"
                         ),
                         value = ContentItem(
                             type = "text",
-                            label = "India"
+                            label = "\$VAR$",
+                            modifiers = listOf(
+                                ContentModifier(
+                                    type = "bold",
+                                    displayText = "India",
+                                    identifier = "\$VAR$"
+                                )
+                            )
                         )
                     ),
                     InfoPair(
                         key = ContentItem(
                             type = "text",
-                            label = "Manufacturer"
+                            label = "Manufacturer:"
                         ),
                         value = ContentItem(
                             type = "text",
-                            label = "Christmas Pvt. Ltd."
+                            label = "\$VAR$",
+                            modifiers = listOf(
+                                ContentModifier(
+                                    type = "bold",
+                                    displayText = "Christmas Pvt. Ltd.",
+                                    identifier = "\$VAR$"
+                                )
+                            )
                         )
                     )
                 )

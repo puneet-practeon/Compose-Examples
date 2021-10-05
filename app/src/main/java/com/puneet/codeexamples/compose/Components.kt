@@ -109,23 +109,27 @@ data class ContentModifier(
 @Composable
 fun ProductInformationCard(data: Section<ProductInformationContent>) {
     Card {
-        val modifier = Modifier.padding(4.dp)
-        BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
-            val constraints = this
-            Row(modifier = modifier.fillMaxWidth()) {
-                Column(
-                    modifier = modifier.widthIn(max = constraints.maxWidth / 2)
-                ) {
-                    data.content.infoPairs.forEachIndexed { _, pair ->
-                        Row {
-                            RenderTextComponent(pair.key)
+        Column(modifier = Modifier.padding(16.dp)) {
+            RenderTextComponent(data.content.title)
+            Spacer(modifier = Modifier.height(16.dp))
+            BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                val constraints = this
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Column(
+                        modifier = Modifier.widthIn(max = constraints.maxWidth / 2)
+                            .padding(end = 12.dp)
+                    ) {
+                        data.content.infoPairs.forEachIndexed { _, pair ->
+                            Row {
+                                RenderTextComponent(pair.key)
+                            }
                         }
                     }
-                }
-                Column(modifier = modifier) {
-                    data.content.infoPairs.forEachIndexed { _, pair ->
-                        Row {
-                            RenderTextComponent(pair.value)
+                    Column(modifier = Modifier.padding(start = 12.dp)) {
+                        data.content.infoPairs.forEachIndexed { _, pair ->
+                            Row {
+                                RenderTextComponent(pair.value)
+                            }
                         }
                     }
                 }
