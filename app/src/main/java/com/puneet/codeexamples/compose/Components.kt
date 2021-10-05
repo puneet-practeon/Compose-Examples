@@ -101,6 +101,7 @@ data class ContentModifier(
         const val TYPE_SIZE = "size"
         const val TYPE_COLOR = "color"
         const val TYPE_UNDERLINE = "underline"
+        const val TYPE_STRIKETHROUGH = "strikethrough"
     }
 }
 
@@ -108,34 +109,24 @@ data class ContentModifier(
 @Composable
 fun ProductInformationCard(data: Section<ProductInformationContent>) {
     Card {
-        ConstraintLayout {
-            val (title, content) = createRefs()
-
-            data.content.title.let { model ->
-                RenderTextComponent(model, Modifier.constrainAs(title) {
-                    linkTo(
-                        start = parent.start,
-                        end = parent.end,
-                    )
-                    top.linkTo(parent.top)
-
-                    width = Dimension.fillToConstraints
-                })
-            }
-            // TODO Create a barrier with dynamic views
-
-            Column(Modifier.constrainAs(content) {
-                linkTo(
-                    start = parent.start,
-                    end = parent.end
-                )
-                top.linkTo(title.bottom, 12.dp)
-
-                width = Dimension.fillToConstraints
-            }) {
-                data.content.infoPairs.forEachIndexed { index, pair ->
-                    Row {
-                        RenderTextComponent(pair.key)
+        val modifier = Modifier.padding(4.dp)
+        BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
+            val constraints = this
+            Row(modifier = modifier.fillMaxWidth()) {
+                Column(
+                    modifier = modifier.widthIn(max = constraints.maxWidth / 2)
+                ) {
+                    data.content.infoPairs.forEachIndexed { _, pair ->
+                        Row {
+                            RenderTextComponent(pair.key)
+                        }
+                    }
+                }
+                Column(modifier = modifier) {
+                    data.content.infoPairs.forEachIndexed { _, pair ->
+                        Row {
+                            RenderTextComponent(pair.value)
+                        }
                     }
                 }
             }
@@ -283,6 +274,8 @@ fun processStyle(modifiers: List<ContentModifier>): SpanStyle {
             Color(android.graphics.Color.parseColor(it))
         } ?: Color.Unspecified,
         textDecoration = modifiers.getModifier(ContentModifier.TYPE_UNDERLINE)?.let {
+            TextDecoration.Underline
+        } ?: modifiers.getModifier(ContentModifier.TYPE_STRIKETHROUGH)?.let {
             TextDecoration.LineThrough
         },
         fontWeight = modifiers.getModifier(ContentModifier.TYPE_BOLD)?.let {
@@ -303,22 +296,20 @@ fun MyTextComponent(
     if (isRichText) {
         Text(
             text = processText(model),
-            modifier = Modifier.clickable {
-                handleAction(
-                    context,
-                    tapAction?.onPressEvent?.action
-                )
-            }.then(modifier),
+            modifier = tapAction?.onPressEvent?.action?.let {
+                Modifier.clickable {
+                    handleAction(context, it)
+                }.then(modifier)
+            } ?: modifier
         )
     } else {
         Text(
             text = model.modifiers.last().displayText,
-            modifier = Modifier.clickable {
-                handleAction(
-                    context,
-                    tapAction?.onPressEvent?.action
-                )
-            }.then(modifier),
+            modifier = tapAction?.onPressEvent?.action?.let {
+                Modifier.clickable {
+                    handleAction(context, it)
+                }.then(modifier)
+            } ?: modifier,
             fontSize = model.getModifier(ContentModifier.TYPE_SIZE)?.size?.let {
                 TextUnit(it.toFloat(), TextUnitType.Sp)
             } ?: TextUnit.Unspecified,
