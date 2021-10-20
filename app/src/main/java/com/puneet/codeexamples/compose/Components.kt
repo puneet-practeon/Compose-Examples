@@ -750,10 +750,15 @@ fun createTextStyle(model: ContentItem, baseStyle: TextStyle?): TextStyle {
 }
 
 fun handleAction(context: Context, action: Action?) {
-    action?.let {
-        if (it.type == Action.ACTION_SHOW_TOAST) {
-            Toast.makeText(context, it.data?.get("message") as CharSequence, Toast.LENGTH_SHORT)
-                .show()
+    action?.let { a ->
+        if (a.type == Action.ACTION_SHOW_TOAST) {
+
+            (a.data?.get("message") as CharSequence?)?.let {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            }
+            (a.data?.get("drug_id") as Int?)?.let {
+                Toast.makeText(context, "Drug ID $it", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

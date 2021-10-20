@@ -78,12 +78,6 @@ class ComposeActivity : AppCompatActivity() {
         }
     }
 
-//    private fun getComponents(): List<Component<*>> {
-//        return listOf(
-//            getCarouselSectionData(),
-//        )
-//    }
-
     private fun getWebviewSectionData(
         id: String,
         isLazyLoaded: Boolean
