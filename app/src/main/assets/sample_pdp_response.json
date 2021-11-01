@@ -1,0 +1,530 @@
+{
+  "id": "rx_pdp",
+  "version": 1,
+  "layout": {
+    "nav": {
+      "type": "single_section",
+      "section_details": {
+        "section_id": "navigation"
+      }
+    },
+    "body": {
+      "type": "multi_section",
+      "section_details": [
+        {
+          "section_id": "image_carousel"
+        },
+        {
+          "section_id": "product_name_and_pricing"
+        },
+        {
+          "section_id": "product_information"
+        },
+        {
+          "section_id": "web_view_card_know_more"
+        },
+        {
+          "section_id": "web_view_card_returns"
+        },
+        {
+          "section_id": "web_view_card_disclaimer"
+        },
+        {
+          "section_id": "banner_widget"
+        }
+      ]
+    },
+    "footer": {}
+  },
+  "sections": [
+    {
+      "id": "navigation",
+      "type": "PDP_NAVIGATION",
+      "section": {
+        "version": 1,
+        "content": {
+          "title": {
+            "type": "text",
+            "label": "Ecosprin-AV 75 Capsules"
+          },
+          "cta": {
+            "type": "share_cta",
+            "interactions": {
+              "on_press": {
+                "action": {
+                  "type": "share_cta",
+                  "data": {
+                    "share_url": "absolute url string"
+                  }
+                },
+                "pel_event": {
+                  "medicine_id": 123
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "image_carousel",
+      "type": "IMAGE_CAROUSEL",
+      "meta_data": {
+        "is_lazy_loaded": false,
+        "lazy_load_url": ""
+      },
+      "section": {
+        "version": 1,
+        "content": {
+          "list": [
+            {
+              "type": "image",
+              "url": "https://image.shutterstock.com/shutterstock/photos/1583248045/display_1500/stock-vector-application-of-smartphone-with-business-graph-and-analytics-data-on-isometric-mobile-phone-1583248045.jpg"
+            },
+            {
+              "type": "image",
+              "url": "https://image.shutterstock.com/shutterstock/photos/1583248045/display_1500/stock-vector-application-of-smartphone-with-business-graph-and-analytics-data-on-isometric-mobile-phone-1583248045.jpg"
+            },
+            {
+              "type": "image",
+              "url": "https://image.shutterstock.com/shutterstock/photos/1583248045/display_1500/stock-vector-application-of-smartphone-with-business-graph-and-analytics-data-on-isometric-mobile-phone-1583248045.jpg"
+            },
+            {
+              "type": "image",
+              "url": "https://image.shutterstock.com/shutterstock/photos/1583248045/display_1500/stock-vector-application-of-smartphone-with-business-graph-and-analytics-data-on-isometric-mobile-phone-1583248045.jpg"
+            },
+            {
+              "type": "video",
+              "url": "https://image.shutterstock.com/shutterstock/photos/1583248045/display_1500/stock-vector-application-of-smartphone-with-business-graph-and-analytics-data-on-isometric-mobile-phone-1583248045.jpg"
+            }
+          ]
+        },
+        "interactions": {
+          "on_press": {
+            "action": {
+              "type": "view_full_screen_media"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "product_name_and_pricing",
+      "type": "PRODUCT_NAME_AND_PRICING",
+      "meta_data": {
+        "is_lazy_loaded": false,
+        "lazy_load_url": ""
+      },
+      "section": {
+        "version": 1,
+        "content": {
+          "header": {
+            "type": "view_with_text",
+            "label": "Prescription Required",
+            "modifiers": [
+              {
+                "background_color": "#FFF8E7"
+              }
+            ]
+          },
+          "title": {
+            "type": "text",
+            "label": "$NAME$",
+            "modifiers": [
+              {
+                "type": "bold",
+                "identifier": "$NAME$",
+                "display_text": "Ecosprin-AV 75 Capsules"
+              }
+            ]
+          },
+          "subtitle": {
+            "type": "text",
+            "label": "$SUBTITLE$",
+            "modifiers": [
+              {
+                "type": "color",
+                "identifier": "$SUBTITLE$",
+                "display_text": "By USV Private Limited",
+                "color": "#2D2D32"
+              }
+            ]
+          },
+          "line_1": {
+            "type": "text",
+            "label": "₹1,410"
+          },
+          "line_2": {
+            "type": "text",
+            "modifiers": [
+              {
+                "type": "strike_through",
+                "identifier": "$PRICE$",
+                "display_text": "MRP 1,990.44"
+              }
+            ],
+            "label": "$PRICE$"
+          },
+          "line_3": {
+            "type": "text",
+            "modifiers": [
+              {
+                "type": "color",
+                "identifier": "$PRICE$",
+                "display_text": "Save ₹28.56",
+                "color": "#02A401"
+              }
+            ],
+            "label": "$PRICE$"
+          },
+          "line_4": {
+            "type": "text",
+            "modifiers": [
+              {
+                "type": "color",
+                "identifier": "$TEXT$",
+                "display_text": "Inclusive of all taxes",
+                "color": "#787887"
+              }
+            ],
+            "label": "$TEXT$"
+          },
+          "error_view": {
+            "type": "view_with_text",
+            "label": "$TEXT$",
+            "modifiers": [
+              {
+                "type": "color",
+                "identifier": "$TEXT$",
+                "display_text": "OUT OF STOCK",
+                "color": "#FFFFFF"
+              },
+              {
+                "background_color": "#EF3A25"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "product_information",
+      "type": "PRODUCT_INFORMATION",
+      "meta_data": {
+        "is_lazy_loaded": false,
+        "lazy_load_url": ""
+      },
+      "section": {
+        "version": 1,
+        "content": {
+          "title": {
+            "type": "text",
+            "modifiers": [],
+            "label": "Product Information"
+          },
+          "list": [
+            {
+              "type": "text",
+              "label": "$KEY$",
+              "sub_text": "$VALUE$",
+              "modifiers": [
+                {
+                  "type": "underlined",
+                  "identifier": "$VALUE$",
+                  "display_text": "$VALUE$"
+                },
+                {
+                  "type": "bold",
+                  "identifier": "$VALUE$",
+                  "display_text": "Atorvastatin"
+                },
+                {
+                  "type": "color",
+                  "identifier": "$KEY$",
+                  "display_text": "Contains:",
+                  "color": "#2D2D32"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "label": "$KEY$",
+              "sub_text": "$VALUE$",
+              "modifiers": [
+                {
+                  "type": "bold",
+                  "identifier": "$VALUE$",
+                  "display_text": "Cipla"
+                },
+                {
+                  "type": "color",
+                  "identifier": "$KEY$",
+                  "display_text": "Manufacturer:",
+                  "color": "#2D2D32"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "label": "$KEY$",
+              "sub_text": "$VALUE$",
+              "modifiers": [
+                {
+                  "type": "bold",
+                  "identifier": "$VALUE$",
+                  "display_text": "India"
+                },
+                {
+                  "type": "color",
+                  "identifier": "$KEY$",
+                  "display_text": "Country of origin:",
+                  "color": "#2D2D32"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "label": "$KEY$",
+              "sub_text": "$VALUE$",
+              "modifiers": [
+                {
+                  "type": "bold",
+                  "identifier": "$VALUE$",
+                  "display_text": "Protected from moisture"
+                },
+                {
+                  "type": "color",
+                  "identifier": "$KEY$",
+                  "display_text": "Storage:",
+                  "color": "#2D2D32"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "web_view_card_know_more",
+      "type": "WEB_VIEW_CARD",
+      "meta_data": {
+        "is_lazy_loaded": false,
+        "lazy_load_url": ""
+      },
+      "section": {
+        "version": 1,
+        "content": {
+          "title": {
+            "type": "text",
+            "label": "$TITLE$",
+            "modifiers": [
+              {
+                "type": "bold",
+                "identifier": "$TITLE$",
+                "display_text": "$TITLE$"
+              },
+              {
+                "type": "color",
+                "identifier": "$TITLE$",
+                "display_text": "Know More",
+                "color": "#2D2D32"
+              }
+            ]
+          },
+          "subtitle": {
+            "type": "text",
+            "label": "$SUB_TEXT$",
+            "modifiers": [
+              {
+                "type": "color",
+                "identifier": "$SUB_TEXT$",
+                "display_text": "General Instructions, Interactions, Dosage, Warnings, When not to use, Side effects, Other Details",
+                "color": "#2D2D32"
+              }
+            ]
+          },
+          "photo": {
+            "type": "image",
+            "url": "https://image.shutterstock.com/shutterstock/photos/1583248045/display_1500/stock-vector-application-of-smartphone-with-business-graph-and-analytics-data-on-isometric-mobile-phone-1583248045.jpg",
+            "photo_alignment": "right",
+            "sub_type": "arrow_icon"
+          }
+        },
+        "interactions": {
+          "on_press": {
+            "action": {
+              "type": "open_web_view",
+              "data": {
+                "url": ""
+              },
+              "pel_event": {
+                "medicine_id": 123
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "web_view_card_returns",
+      "type": "WEB_VIEW_CARD",
+      "meta_data": {
+        "is_lazy_loaded": false,
+        "lazy_load_url": ""
+      },
+      "section": {
+        "version": 1,
+        "content": {
+          "title": {
+            "type": "text",
+            "label": "$TITLE$",
+            "modifiers": [
+              {
+                "type": "bold",
+                "identifier": "$TITLE$",
+                "display_text": "$TITLE$"
+              },
+              {
+                "type": "color",
+                "identifier": "$TITLE$",
+                "display_text": "Return Policy",
+                "color": "#2D2D32"
+              }
+            ]
+          },
+          "subtitle": {
+            "type": "text",
+            "label": "$SUB_TEXT$",
+            "modifiers": [
+              {
+                "type": "color",
+                "identifier": "$SUB_TEXT$",
+                "display_text": "This medicine is not returable. For full details on our returns policies",
+                "color": "#2D2D32"
+              }
+            ]
+          },
+          "photo": {
+            "type": "image",
+            "url": "https://image.shutterstock.com/shutterstock/photos/1583248045/display_1500/stock-vector-application-of-smartphone-with-business-graph-and-analytics-data-on-isometric-mobile-phone-1583248045.jpg",
+            "photo_alignment": "right",
+            "sub_type": "photo"
+          },
+          "cta": {
+            "type": "text",
+            "label": "$TEXT$",
+            "modifiers": [
+              {
+                "type": "underlined",
+                "identifier": "$TEXT$",
+                "display_text": "Read More"
+              }
+            ],
+            "interactions": {
+              "on_press": {
+                "action": {
+                  "type": "open_web_view",
+                  "data": {
+                    "url": ""
+                  },
+                  "pel_event": {
+                    "medicine_id": 123
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "web_view_card_disclaimer",
+      "type": "WEB_VIEW_CARD",
+      "meta_data": {
+        "is_lazy_loaded": false,
+        "lazy_load_url": ""
+      },
+      "section": {
+        "version": 1,
+        "content": {
+          "title": {
+            "type": "text",
+            "label": "$TITLE$",
+            "modifiers": [
+              {
+                "type": "bold",
+                "identifier": "$TITLE$",
+                "display_text": "$TITLE$"
+              },
+              {
+                "type": "color",
+                "identifier": "$TITLE$",
+                "display_text": "Disclaimer",
+                "color": "#2D2D32"
+              }
+            ]
+          },
+          "subtitle": {
+            "type": "text",
+            "label": "$SUB_TEXT$",
+            "modifiers": [
+              {
+                "type": "color",
+                "identifier": "$SUB_TEXT$",
+                "display_text": "We’ve made all possible efforts to ensure that the information provided here is accurate, up-to-date and complete, however, it should not be treated as a substitute for professional medical",
+                "color": "#2D2D32"
+              }
+            ]
+          },
+          "cta": {
+            "type": "text",
+            "label": "$TEXT$",
+            "modifiers": [
+              {
+                "type": "underlined",
+                "identifier": "$TEXT$",
+                "display_text": "Read More"
+              }
+            ],
+            "interactions": {
+              "on_press": {
+                "action": {
+                  "type": "open_web_view",
+                  "data": {
+                    "url": ""
+                  },
+                  "pel_event": {
+                    "medicine_id": 123
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "banner_widget",
+      "type": "BANNER_WIDGET",
+      "meta_data": {
+        "is_lazy_loaded": false,
+        "lazy_load_url": ""
+      },
+      "section": {
+        "version": 1,
+        "content": {
+          "photo": {
+            "type": "full_banner",
+            "url": "https://image.shutterstock.com/shutterstock/photos/1583248045/display_1500/stock-vector-application-of-smartphone-with-business-graph-and-analytics-data-on-isometric-mobile-phone-1583248045.jpg",
+            "image_width": 20,
+            "image_height": 20
+          }
+        }
+      }
+    }
+  ],
+  "meta_data": {
+    "medicine_id": 123,
+    "medicine_name": "Dolo"
+  }
+}

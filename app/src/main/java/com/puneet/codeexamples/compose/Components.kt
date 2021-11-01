@@ -2,6 +2,10 @@ package com.puneet.codeexamples.compose
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -11,10 +15,8 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,15 +30,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import coil.annotation.ExperimentalCoilApi
+import com.bumptech.glide.Glide
 import com.google.accompanist.pager.*
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 import com.puneet.codeexamples.R
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -90,6 +97,11 @@ data class CarouselContent(
     val list: List<ContentItem>
 )
 
+data class NavigationContent(
+    val title: ContentItem?,
+    val cta: ContentItem?
+)
+
 data class ContentItem(
     val type: String,
     val subType: String? = null,
@@ -123,12 +135,17 @@ data class OnPressEvent(
 
 data class Action(
     val type: String,
-    val data: HashMap<String, Any>? = null
+    val data: Data? = null
 ) {
     companion object {
         const val ACTION_SHOW_TOAST = "show_toast"
     }
 }
+
+data class Data(
+    val url: String? = null,
+    val extra: HashMap<String, Any>? = null
+)
 
 interface Event {
     val pelEvent: HashMap<String, Any>
@@ -153,6 +170,24 @@ data class ContentModifier(
 }
 
 // MARK - 05/10/21 Components
+
+@Composable
+fun PdpNavigationHeader(modifier: Modifier, onBackPress: () -> Unit) {
+    TopAppBar(
+        modifier = modifier
+    ) {
+        Row {
+            IconButton(
+                onClick = onBackPress
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back button"
+                )
+            }
+        }
+    }
+}
 
 @ExperimentalUnitApi
 @Composable
@@ -197,11 +232,7 @@ fun WebviewCard(component: Component<WebviewContent>) {
         highlight = PlaceholderHighlight.shimmer()
     )
     Card {
-        ConstraintLayout(Modifier.apply {
-            if (data?.content?.cta == null && data?.interaction != null) {
-                clickable { /* Handle the click action */ }
-            }
-        }.padding(16.dp)) {
+        ConstraintLayout(Modifier.padding(16.dp)) {
             val (image, title, subtitle, cta) = createRefs()
 
             data?.content?.title.let { model ->
@@ -440,32 +471,120 @@ fun ProductNameAndPricingComponent(component: Component<ProductNameAndPricingCon
     }
 }
 
+@ExperimentalMaterialApi
 @ExperimentalPagerApi
 @Composable
 fun CarouselComponent(
     component: Component<CarouselContent>,
-    currentIndex: Int = 0,
-    onImageTap: (Int) -> Unit = {}
+    pagerState: PagerState,
+    onImageTap: () -> Unit = {}
 ) {
     val data = component.section
-    val pagerState =
-        rememberPagerState(data?.content?.list?.count { it.url != null } ?: 0, currentIndex)
-    Column {
-        HorizontalPager(
-            state = pagerState,
-        ) { position ->
-            data?.content?.list?.get(position)?.url?.let { url ->
-                GlideImage(
-                    imageModel = url,
-                    modifier = Modifier.height(200.dp).clickable { onImageTap.invoke(position) }
-                )
-            }
+    val scaffold = rememberBottomSheetScaffoldState(
+        bottomSheetState = BottomSheetState(initialValue = BottomSheetValue.Collapsed)
+    )
+    val scope = rememberCoroutineScope()
+    BottomSheetScaffold(
+        scaffoldState = scaffold,
+        sheetContent = {
+            Scaffold(
+                topBar = {
+                    TopAppBar {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    scaffold.bottomSheetState.collapse()
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.ArrowBack,
+                                contentDescription = null
+                            )
+                        }
+                    }
+                }
+            ) {
+                Column {
+                    HorizontalPager(
+                        state = pagerState,
+                    ) { position ->
+                        data?.content?.list?.get(position)?.url?.let { url ->
+                            GlideImage(
+                                imageModel = url,
+                                modifier = Modifier.height(200.dp).clickable { onImageTap.invoke() }
+                            )
+                        }
 
+                    }
+                    HorizontalPagerIndicator(
+                        pagerState = pagerState,
+                        modifier = Modifier.padding(top = 16.dp).align(Alignment.CenterHorizontally)
+                    )
+                }
+            }
+        },
+        sheetPeekHeight = 0.dp
+    ) {
+        Column {
+            HorizontalPager(
+                state = pagerState,
+            ) { position ->
+                data?.content?.list?.get(position)?.url?.let { url ->
+                    GlideImage(
+                        imageModel = url,
+                        modifier = Modifier.height(200.dp).clickable {
+                            scope.launch {
+                                scaffold.bottomSheetState.expand()
+                            }
+                        }
+                    )
+                }
+
+            }
+            HorizontalPagerIndicator(
+                pagerState = pagerState,
+                modifier = Modifier.padding(top = 16.dp).align(Alignment.CenterHorizontally)
+            )
         }
-        HorizontalPagerIndicator(
-            pagerState = pagerState,
-            modifier = Modifier.padding(top = 16.dp).align(Alignment.CenterHorizontally)
-        )
+    }
+}
+
+@ExperimentalAnimationApi
+@ExperimentalMaterialApi
+@ExperimentalCoilApi
+@ExperimentalPagerApi
+@Composable
+fun FullScreenBottomSheet(
+    bottomSheetScaffoldState: BottomSheetScaffoldState,
+    component: Component<CarouselContent>,
+    pagerState: PagerState,
+    scope: CoroutineScope
+) {
+    BottomSheetScaffold(
+        scaffoldState = bottomSheetScaffoldState,
+        topBar = null,
+        sheetContent = {
+            Box(
+                Modifier.fillMaxWidth()
+            ) {
+                FullScreenCarouselComponent(component, pagerState) {
+                    scope.launch {
+                        bottomSheetScaffoldState.bottomSheetState.collapse()
+                    }
+                }
+            }
+        },
+        sheetPeekHeight = 0.dp
+    ) {
+        CarouselComponent(
+            component = component,
+            pagerState = pagerState
+        ) {
+            scope.launch {
+                bottomSheetScaffoldState.bottomSheetState.expand()
+            }
+        }
     }
 }
 
@@ -473,17 +592,15 @@ fun CarouselComponent(
 @Composable
 fun FullScreenCarouselComponent(
     component: Component<CarouselContent>,
-    currentIndex: Int = 0,
-    onBackPress: (Int) -> Unit
+    pagerState: PagerState,
+    onBackPress: () -> Unit
 ) {
     val data = component.section
-    val pagerState =
-        rememberPagerState(data?.content?.list?.count { it.url != null } ?: 0, currentIndex)
     Column {
         TopAppBar(
             title = { },
             navigationIcon = {
-                IconButton(onClick = { onBackPress(pagerState.currentPage) }) {
+                IconButton(onClick = onBackPress) {
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
                 }
             })
@@ -753,10 +870,10 @@ fun handleAction(context: Context, action: Action?) {
     action?.let { a ->
         if (a.type == Action.ACTION_SHOW_TOAST) {
 
-            (a.data?.get("message") as CharSequence?)?.let {
+            (a.data?.extra?.get("message") as CharSequence?)?.let {
                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             }
-            (a.data?.get("drug_id") as Int?)?.let {
+            (a.data?.extra?.get("drug_id") as Int?)?.let {
                 Toast.makeText(context, "Drug ID $it", Toast.LENGTH_SHORT).show()
             }
         }
@@ -773,8 +890,4 @@ fun ContentItem.getModifier(type: String): ContentModifier? {
 
 fun List<ContentModifier>.getModifier(type: String): ContentModifier? {
     return find { it.type == type }
-}
-
-fun Color.Companion.fromColor(hexString: String): Color {
-    return Color(android.graphics.Color.parseColor(hexString))
 }

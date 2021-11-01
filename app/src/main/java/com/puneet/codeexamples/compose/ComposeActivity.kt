@@ -1,76 +1,89 @@
 package com.puneet.codeexamples.compose
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Surface
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.ExperimentalUnitApi
+import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.rememberPagerState
 import com.google.android.material.composethemeadapter.MdcTheme
+import com.puneet.codeexamples.compose.components.HeaderWithTwoRightCtas
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.launch
 
 @ExperimentalUnitApi
 @InternalCoroutinesApi
 @ExperimentalPagerApi
+@ExperimentalMaterialApi
+@ExperimentalCoilApi
+@ExperimentalAnimationApi
 class ComposeActivity : AppCompatActivity() {
+
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         setContent {
-            var isFullScreen by remember { mutableStateOf(false) }
-            var currentIndex by remember { mutableStateOf(0) }
             MdcTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    if (isFullScreen) {
-                        FullScreenCarouselComponent(
-                            component = getCarouselSectionData("123", false),
-                            currentIndex
-                        ) { index ->
-                            isFullScreen = false
-                            currentIndex = index
+                    LazyColumn {
+                        item {
+                            HeaderWithTwoRightCtas(
+                                modifier = Modifier,
+                                section = getNavigationSection(),
+                                onBackPress = { finish() },
+                                onPress = { handleAction(this@ComposeActivity, action = it) }
+                            )
                         }
-                    } else {
-                        LazyColumn {
-//                            items(getComponents().size) {
-//
-//                            }
-                            item {
-                                CarouselComponent(
-                                    component = getCarouselSectionData("123", false),
-                                    currentIndex
-                                ) { index ->
-                                    isFullScreen = true
-                                    currentIndex = index
-                                }
-                            }
-                            item {
-                                WebviewCard(component = getWebviewSectionData("asf123", false))
-                            }
-                            item {
-                                ProductInformationCard(
-                                    component = getProductInfoSectionData(
-                                        "53",
-                                        false
-                                    )
+                        item {
+                            val content = getCarouselSectionData("123", false)
+                            val pagerState =
+                                rememberPagerState(content.section?.content?.list?.count { it.url != null }
+                                    ?: 0)
+                            val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+                                bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
+                            )
+                            val scope = rememberCoroutineScope()
+                            FullScreenBottomSheet(
+                                bottomSheetScaffoldState = bottomSheetScaffoldState,
+                                component = content,
+                                pagerState = pagerState,
+                                scope = scope
+                            )
+                        }
+                        item {
+                            WebviewCard(component = getWebviewSectionData("asf123", false))
+                        }
+                        item {
+                            ProductInformationCard(
+                                component = getProductInfoSectionData(
+                                    "53",
+                                    false
                                 )
-                            }
-                            item {
-                                BannerComponent(component = getBannerSectionData("1234", false))
-                            }
-                            item {
-                                ProductNameAndPricingComponent(
-                                    component = getProductNameAndPricingSectionData(
-                                        "1231",
-                                        false
-                                    )
+                            )
+                        }
+                        item {
+                            BannerComponent(component = getBannerSectionData("1234", false))
+                        }
+                        item {
+                            ProductNameAndPricingComponent(
+                                component = getProductNameAndPricingSectionData(
+                                    "1231",
+                                    false
                                 )
-                            }
+                            )
                         }
                     }
                 }
@@ -78,108 +91,114 @@ class ComposeActivity : AppCompatActivity() {
         }
     }
 
-    private fun getWebviewSectionData(
-        id: String,
-        isLazyLoaded: Boolean
-    ): Component<WebviewContent> {
-        return Component(
-            id = id,
-            type = "WEBVIEW",
-            isLazyLoaded = isLazyLoaded,
-            lazyLoadUrl = "something",
-            section = Section(
-                version = 1,
-                content = WebviewContent(
-                    title = ContentItem(
-                        label = "Return Policy",
-                        type = "text"
-                    ),
-                    subtitle = ContentItem(
-                        label = "This medicine is not \$VAR$. For full details on our returns policies",
-                        type = "text",
-                        modifiers = listOf(
-                            ContentModifier(
-                                type = "color",
-                                color = "#346ab2",
-                                displayText = "\$VAR$",
-                                identifier = "\$VAR$"
-                            ),
-                            ContentModifier(
-                                type = "bold",
-                                displayText = "\$VAR$",
-                                identifier = "\$VAR$"
-                            ),
-                            ContentModifier(
-                                type = "link",
-                                displayText = "\$VAR$",
-                                identifier = "\$VAR$",
-                                interaction = Interaction(
-                                    onPressEvent = OnPressEvent(
-                                        action = Action(
-                                            type = "show_toast",
-                                            data = hashMapOf(
-                                                "message" to "Word clicked"
-                                            )
+    companion object {
+        fun getWebviewSectionData(
+            id: String,
+            isLazyLoaded: Boolean
+        ): Component<WebviewContent> {
+            return Component(
+                id = id,
+                type = "WEBVIEW",
+                isLazyLoaded = isLazyLoaded,
+                lazyLoadUrl = "something",
+                section = Section(
+                    version = 1,
+                    content = WebviewContent(
+                        title = ContentItem(
+                            label = "Return Policy",
+                            type = "text"
+                        ),
+                        subtitle = ContentItem(
+                            label = "This medicine is not \$VAR$. For full details on our returns policies",
+                            type = "text",
+                            modifiers = listOf(
+                                ContentModifier(
+                                    type = "color",
+                                    color = "#346ab2",
+                                    displayText = "\$VAR$",
+                                    identifier = "\$VAR$"
+                                ),
+                                ContentModifier(
+                                    type = "bold",
+                                    displayText = "\$VAR$",
+                                    identifier = "\$VAR$"
+                                ),
+                                ContentModifier(
+                                    type = "link",
+                                    displayText = "\$VAR$",
+                                    identifier = "\$VAR$",
+                                    interaction = Interaction(
+                                        onPressEvent = OnPressEvent(
+                                            action = Action(
+                                                type = "show_toast",
+                                                data = Data(
+                                                    extra = hashMapOf(
+                                                        "message" to "Word clicked"
+                                                    )
+                                                )
+                                            ),
+                                            pelEvent = hashMapOf()
                                         ),
-                                        pelEvent = hashMapOf()
-                                    ),
+                                    )
+                                ),
+                                ContentModifier(
+                                    type = "underline",
+                                    displayText = "returnable",
+                                    identifier = "\$VAR$"
                                 )
-                            ),
-                            ContentModifier(
-                                type = "underline",
-                                displayText = "returnable",
-                                identifier = "\$VAR$"
                             )
-                        )
-                    ),
-                    cta = ContentItem(
-                        label = "\$CTA$",
-                        type = "text",
-                        modifiers = listOf(
-                            ContentModifier(
-                                type = "bold",
-                                displayText = "\$CTA$",
-                                identifier = "\$CTA$"
-                            ),
-                            ContentModifier(
-                                type = "color",
-                                color = "#000000",
-                                displayText = "\$CTA$",
-                                identifier = "\$CTA$"
-                            ),
-                            ContentModifier(
-                                type = "link",
-                                displayText = "\$CTA$",
-                                identifier = "\$CTA$",
-                                interaction = Interaction(
-                                    onPressEvent = OnPressEvent(
-                                        action = Action(
-                                            type = "show_toast",
-                                            data = hashMapOf(
-                                                "message" to "Action Performed"
+                        ),
+                        cta = ContentItem(
+                            label = "\$CTA$",
+                            type = "text",
+                            modifiers = listOf(
+                                ContentModifier(
+                                    type = "bold",
+                                    displayText = "\$CTA$",
+                                    identifier = "\$CTA$"
+                                ),
+                                ContentModifier(
+                                    type = "color",
+                                    color = "#000000",
+                                    displayText = "\$CTA$",
+                                    identifier = "\$CTA$"
+                                ),
+                                ContentModifier(
+                                    type = "link",
+                                    displayText = "\$CTA$",
+                                    identifier = "\$CTA$",
+                                    interaction = Interaction(
+                                        onPressEvent = OnPressEvent(
+                                            action = Action(
+                                                type = "show_toast",
+                                                data = Data(
+                                                    extra = hashMapOf(
+                                                        "message" to "Action Performed"
+                                                    )
+                                                )
+                                            ),
+                                            pelEvent = hashMapOf(
+                                                "cta_clicked" to "Read More Cta has been clicked"
                                             )
-                                        ),
-                                        pelEvent = hashMapOf(
-                                            "cta_clicked" to "Read More Cta has been clicked"
                                         )
                                     )
-                                )
-                            ),
-                            ContentModifier(
-                                type = "underline",
-                                displayText = "Read More",
-                                identifier = "\$CTA$"
+                                ),
+                                ContentModifier(
+                                    type = "underline",
+                                    displayText = "Read More",
+                                    identifier = "\$CTA$"
+                                ),
                             ),
                         ),
-                    ),
-                    photo = ContentItem(
-                        type = "image",
-                        subType = "arrow_right"
-//                                url = "https://iili.io/RmEhtn.png"
+                        photo = ContentItem(
+                            type = "image",
+//                            subType = "arrow_right"
+                            url = "https://iili.io/RmEhtn.png"
+                        )
                     )
                 )
             )
-        )
+        }
     }
 
     private fun getProductInfoSectionData(
@@ -400,8 +419,10 @@ class ComposeActivity : AppCompatActivity() {
                             onPressEvent = OnPressEvent(
                                 action = Action(
                                     type = "show_toast",
-                                    data = hashMapOf(
-                                        "drug_id" to 1
+                                    data = Data(
+                                        extra = hashMapOf(
+                                            "drug_id" to 1
+                                        )
                                     )
                                 ),
                                 pelEvent = hashMapOf(
@@ -463,6 +484,32 @@ class ComposeActivity : AppCompatActivity() {
                         ContentItem(
                             type = "image",
                             url = "https://source.unsplash.com/Wn4ulyzVoD4"
+                        )
+                    )
+                )
+            )
+        )
+    }
+
+    private fun getNavigationSection(): Section<NavigationContent> {
+        return Section(
+            version = 1,
+            content = NavigationContent(
+                title = ContentItem(
+                    type = "text",
+                    label = "Ecosprin-AV 75 Capsules"
+                ),
+                cta = ContentItem(
+                    type = "share_cta",
+                    interaction = Interaction(
+                        onPressEvent = OnPressEvent(
+                            action = Action(
+                                type = "share_cta",
+                                data = Data(
+                                    url = "Sample URL"
+                                )
+                            ),
+                            pelEvent = hashMapOf()
                         )
                     )
                 )
