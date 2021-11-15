@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-11-15T09:35:50.234Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15" etag="xFtaxNNWdIS0frGze3gF" version="15.7.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-11-15T09:56:21.915Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15" etag="aKIOs9RkoAjeIYxwzPL1" version="15.7.3" type="github">
   <diagram id="4Dhgo8SIeTC7L7POW2xM" name="Page-1">
     <mxGraphModel dx="1426" dy="777" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -28,8 +28,28 @@
         <mxCell id="CN58z6CtYnxjTg2YKUbl-6" value="Load data from network" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="420" y="80" width="80" height="80" as="geometry" />
         </mxCell>
+        <mxCell id="CN58z6CtYnxjTg2YKUbl-11" value="Observer triggered&lt;br&gt;with latest data" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="CN58z6CtYnxjTg2YKUbl-8" target="CN58z6CtYnxjTg2YKUbl-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="CN58z6CtYnxjTg2YKUbl-8" value="Observe the data" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="600" y="90" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="CN58z6CtYnxjTg2YKUbl-13" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0.113;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="CN58z6CtYnxjTg2YKUbl-10" target="CN58z6CtYnxjTg2YKUbl-12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="400" />
+              <mxPoint x="660" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CN58z6CtYnxjTg2YKUbl-15" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=80;entryDy=65;entryPerimeter=0;" edge="1" parent="1" source="CN58z6CtYnxjTg2YKUbl-10" target="CN58z6CtYnxjTg2YKUbl-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CN58z6CtYnxjTg2YKUbl-10" value="is this the same component?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="255" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="CN58z6CtYnxjTg2YKUbl-12" value="Ignored!" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="460" width="120" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
